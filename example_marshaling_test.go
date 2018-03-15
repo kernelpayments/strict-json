@@ -5,10 +5,11 @@
 package json_test
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"strings"
+
+	"github.com/KernelPay/json"
 )
 
 type Animal int
