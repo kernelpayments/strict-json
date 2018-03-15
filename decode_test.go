@@ -533,8 +533,8 @@ var unmarshalTests = []unmarshalTest{
 
 	// Map keys can be encoding.TextUnmarshalers.
 	{in: `{"x:y":true}`, ptr: &ummapType, out: ummapXY},
-	// If multiple values for the same key exists, only the most recent value is used.
-	{in: `{"x:y":false,"x:y":true}`, ptr: &ummapType, out: ummapXY},
+	// If multiple values for the same key exists, error
+	{in: `{"x:y":false,"x:y":true}`, ptr: &ummapType, err: errors.New("json: duplicate key {A:x B:y}")},
 
 	// Overwriting of data.
 	// This is different from package xml, but it's what we've always done.

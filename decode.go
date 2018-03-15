@@ -654,6 +654,7 @@ func (d *decodeState) object(v reflect.Value) {
 		return
 	}
 
+	seenKeys := make(map[interface{}]struct{})
 	var mapElem reflect.Value
 
 	for {
@@ -675,6 +676,8 @@ func (d *decodeState) object(v reflect.Value) {
 		if !ok {
 			d.error(errPhase)
 		}
+
+		var keyInterface interface{}
 
 		// Figure out field corresponding to key.
 		var subv reflect.Value
@@ -699,6 +702,7 @@ func (d *decodeState) object(v reflect.Value) {
 				}
 			}
 			if f != nil {
+				keyInterface = f.name
 				subv = v
 				destring = f.quoted
 				for _, i := range f.index {
@@ -785,7 +789,16 @@ func (d *decodeState) object(v reflect.Value) {
 					panic("json: Unexpected key type") // should never occur
 				}
 			}
+			keyInterface = kv.Interface()
 			v.SetMapIndex(kv, subv)
+		}
+
+		if keyInterface != nil {
+			if _, ok := seenKeys[keyInterface]; ok {
+				d.saveError(fmt.Errorf("json: duplicate key %+v", keyInterface))
+				return
+			}
+			seenKeys[keyInterface] = struct{}{}
 		}
 
 		// Next token must be , or }.
@@ -1071,6 +1084,7 @@ func (d *decodeState) arrayInterface() []interface{} {
 
 // objectInterface is like object but returns map[string]interface{}.
 func (d *decodeState) objectInterface() map[string]interface{} {
+	seenKeys := make(map[string]struct{})
 	m := make(map[string]interface{})
 	for {
 		// Read opening " of string key or closing }.
@@ -1099,6 +1113,11 @@ func (d *decodeState) objectInterface() map[string]interface{} {
 		if op != scanObjectKey {
 			d.error(errPhase)
 		}
+
+		if _, ok := seenKeys[key]; ok {
+			d.error(fmt.Errorf("json: duplicate key \"%s\"", key))
+		}
+		seenKeys[key] = struct{}{}
 
 		// Read value.
 		m[key] = d.valueInterface()
