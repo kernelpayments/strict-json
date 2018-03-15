@@ -813,6 +813,19 @@ func (d *decodeState) object(v reflect.Value) {
 		d.errorContext.Struct = ""
 		d.errorContext.Field = ""
 	}
+
+	if v.Kind() == reflect.Struct {
+		fields := cachedTypeFields(v.Type())
+		for i := range fields {
+			ff := &fields[i]
+			if ff.required {
+				if _, ok := seenKeys[ff.name]; !ok {
+					d.saveError(fmt.Errorf("json: missing required field %s", ff.name))
+					return
+				}
+			}
+		}
+	}
 }
 
 // literal consumes a literal from d.data[d.off-1:], decoding into the value v.
