@@ -697,9 +697,6 @@ func (d *decodeState) object(v reflect.Value) {
 					f = ff
 					break
 				}
-				if f == nil && ff.equalFold(ff.nameBytes, key) {
-					f = ff
-				}
 			}
 			if f != nil {
 				subv = v

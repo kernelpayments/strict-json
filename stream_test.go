@@ -396,7 +396,7 @@ func TestDecodeInStream(t *testing.T) {
 
 // Test from golang.org/issue/11893
 func TestHTTPDecoding(t *testing.T) {
-	const raw = `{ "foo": "bar" }`
+	const raw = `{ "Foo": "bar" }`
 
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(raw))

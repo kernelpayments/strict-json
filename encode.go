@@ -1025,8 +1025,7 @@ func (e *encodeState) stringBytes(s []byte, escapeHTML bool) {
 // A field represents a single field found in a struct.
 type field struct {
 	name      string
-	nameBytes []byte                 // []byte(name)
-	equalFold func(s, t []byte) bool // bytes.EqualFold or equivalent
+	nameBytes []byte // []byte(name)
 
 	tag       bool
 	index     []int
@@ -1037,7 +1036,6 @@ type field struct {
 
 func fillField(f field) field {
 	f.nameBytes = []byte(f.name)
-	f.equalFold = foldFunc(f.nameBytes)
 	return f
 }
 

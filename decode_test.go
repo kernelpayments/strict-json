@@ -244,12 +244,6 @@ type S13 struct {
 	S8
 }
 
-type Ambig struct {
-	// Given "hello", the first match should win.
-	First  int `json:"HELLO"`
-	Second int `json:"Hello"`
-}
-
 type XYZ struct {
 	X interface{}
 	Y interface{}
@@ -603,11 +597,6 @@ var unmarshalTests = []unmarshalTest{
 			},
 		},
 	},
-	{
-		in:  `{"hello": 1}`,
-		ptr: new(Ambig),
-		out: Ambig{First: 1},
-	},
 
 	{
 		in:  `{"X": 1,"Y":2}`,
@@ -817,7 +806,6 @@ var unmarshalTests = []unmarshalTest{
 			"Level0": 1,
 			"Level1b": 2,
 			"Level1c": 3,
-			"x": 4,
 			"Level1a": 5,
 			"LEVEL1B": 6,
 			"e": {
@@ -844,7 +832,6 @@ var unmarshalTests = []unmarshalTest{
 			"Level0": 1,
 			"Level1b": 2,
 			"Level1c": 3,
-			"x": 4,
 			"Level1a": 5,
 			"LEVEL1B": 6,
 			"e": {
