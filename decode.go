@@ -925,7 +925,9 @@ func (d *decodeState) literalStore(item []byte, v reflect.Value, fromQuoted bool
 		switch v.Kind() {
 		case reflect.Interface, reflect.Ptr, reflect.Map, reflect.Slice:
 			v.Set(reflect.Zero(v.Type()))
-			// otherwise, ignore null for primitives/string
+		default:
+			d.saveError(&UnmarshalTypeError{Value: "null", Type: v.Type(), Offset: int64(d.off)})
+			break
 		}
 	case 't', 'f': // true, false
 		value := item[0] == 't'
