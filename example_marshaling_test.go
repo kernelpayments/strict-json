@@ -9,7 +9,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/KernelPay/strict-json"
+	"github.com/kernelpayments/strict-json"
 )
 
 type Animal int

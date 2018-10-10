@@ -12,7 +12,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/KernelPay/strict-json"
+	"github.com/kernelpayments/strict-json"
 )
 
 func ExampleMarshal() {
